@@ -25,10 +25,8 @@ int findKthFromEnd(ListNode* head, int k) {
     if (head == nullptr || k <= 0) {
         return -1; // 错误标识
     }
-    
     ListNode* fast = head;
     ListNode* slow = head;
-    
     // 快指针先走k步
     for (int i = 0; i < k; i++) {
         if (fast == nullptr) {
