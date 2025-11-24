@@ -1,18 +1,13 @@
-#include <type_traits>
 #include <vector>
 #include <string>
 #include <iostream>
-using std::cout;
-using std::endl;
-using std::vector;
-using std::string;
-
-
+using namespace std;
+ 
 vector<int> build_lps(const string &pat){
-	int m = pat.size();
+	int m=(int)pat.size();
 	vector<int> lps(m,0);
 	if(m==0) return lps;
-
+	
 	int len=0;
 	int i=1;
 
@@ -24,32 +19,33 @@ vector<int> build_lps(const string &pat){
 		}else{
 			if(len!=0){
 				len=lps[len-1];
+
 			}else{
 				lps[i]=0;
 				i++;
 			}
 		}
-
 	}
 	return lps;
 }
 
-vector<int> kmp_search_all(const string &txt,const string &pat){
+vector<int> kmp_search_all(const string & txt,const string & pat){
+	vector<int> lps=build_lps(pat);
 	vector<int> res;
-	int n=(int)txt.size();
-	int m=(int)pat.size();
+	int m=txt.size();
+	int n=pat.size();
 	if(m==0){
 		res.push_back(0);
 		return res;
-	}
-	vector<int> lps = build_lps(pat);
+	}	
+
 	int i=0;
 	int j=0;
-	while(i<n){
+	while(i<m){
 		if(txt[i]==pat[j]){
 			i++;
 			j++;
-			if(j==m){
+			if(j==n){
 				res.push_back(i-j);
 				j=lps[j-1];
 			}
@@ -57,30 +53,27 @@ vector<int> kmp_search_all(const string &txt,const string &pat){
 			if(j!=0){
 				j=lps[j-1];
 			}else{
-				i++;
+				i++;				
 			}
 		}
 	}
 	return res;
 }
 
-
-
 int main(void)
 {
-		string txt = "abcxabcdabcdabcyabcdabcy";
+	 
+    string txt = "abcxabcdabcdabcyabcdabcy";
     string pat = "abcdabcy";
 
     // 1) 打印 lps 数组以便查看
     vector<int> lps = build_lps(pat);
-    cout << "Pattern: " << pat << "\nLPS: "; 
+    cout << "Pattern: " << pat << "\nLPS: ";
+    for (int x : lps) cout << x << ' ';
+    cout << "\n\n";
 
-	for(int x:lps){
-		cout<<x<<' ';
-	}
-		cout<<endl;
-
-	vector<int> matches = kmp_search_all(txt, pat);
+    // 2) 找出所有匹配位置
+    vector<int> matches = kmp_search_all(txt, pat);
     if (matches.empty()) {
         cout << "No matches found\n";
     } else {
